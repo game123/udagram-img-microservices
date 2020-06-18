@@ -6,11 +6,11 @@ services:
     image: game123/reverseproxy
   backend_user:
     build:
-      context: ../../udagram-user
+      context: ../../udagram-api-user
     image: game123/udagram-user
   backend_feed:
     build:
-      context: ../../udagram-feed
+      context: ../../udagram-api-feed
     image: game123/udagram-feed
   frontend:
     build:
