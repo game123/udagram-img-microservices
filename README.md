@@ -2,57 +2,67 @@
 
 Udagram is a simple cloud application developed alongside the Udacity Cloud Engineering Nanodegree. It allows users to register and log into a web client, post photos to the feed, and process photos using an image filtering microservice.
 
-The project is split into two parts:
-1. Frontend - Angular web application built with Ionic Framework
-2. Backend RESTful API - Node-Express application
+The project is split into four parts:
+1. The Simple Frontend A basic Ionic client web application which consumes the RestAPI Backend.
+Frontend: port 8100.
+port-forward 8100:8100
+frontend use port 80 but forward to port 8100 of the localhost.
+Command: npm run start or ionic serve
 
-## Getting Started
-> _tip_: it's recommended that you start with getting the backend API running since the frontend web application depends on the API.
+2. The RestAPI Feed Backend, a Node-Express feed microservice.
+Feed Backend: port 8080
+Command: npm run dev or npm run prod
+
+3. The RestAPI User Backend, a Node-Express user microservice.
+User Backend: port 8080.
+don't need to portforward port 8080 to localhost due to passs reverseproxy port
+Command: npm run dev or npm run prod
+
+4. Revers Proxy port 8080
+port-forward 8080:8080
+Reverseproxy runs at port 8080, same as backend-feed and backend-user server.
+
+
 
 ### Prerequisite
-1. The depends on the Node Package Manager (NPM). You will need to download and install Node from [https://nodejs.com/en/download](https://nodejs.org/en/download/). This will allow you to be able to run `npm` commands.
-2. Environment variables will need to be set. These environment variables include database connection details that should not be hard-coded into the application code.
-#### Environment Script
-A file named `set_env.sh` has been prepared as an optional tool to help you configure these variables on your local development environment.
+Create account and login to Docker Hub and create the following repositories:
+udagram-feed
+udagram-user
+udagram-frontend
+reverseproxy
  
-We do _not_ want your credentials to be stored in git. After pulling this `starter` project, run the following command to tell git to stop tracking the script in git but keep it stored locally. This way, you can use the script for your convenience and reduce risk of exposing your credentials.
-`git rm --cached set_env.sh`
 
 Afterwards, we can prevent the file from being included in your solution by adding the file to our `.gitignore` file.
 
-### Database
-Create a PostgreSQL database either locally or on AWS RDS. Set the config values for environment variables prefixed with `POSTGRES_` in `set_env.sh`.
+For Docker:
+First, install Docker in your system.
+Create the docker images for the Frontend, udagram-feed, and udagram-user folders. 
+E.g. the command is docker build -t [name]/udagram-frontend .
+For Reverseproxy, you need to create another docker image in the Deployment folder using the same command.
 
-### S3
-Create an AWS S3 bucket. Set the config values for environment variables prefixed with `AWS_` in `set_env.sh`.
+Once all images are pushed, you can build using sudo -E docker-compose up whilst in the docker deployment folder.
+Go to Localhost:8080 to test.
+Docker deployment complete.
 
-### Backend API
-* To download all the package dependencies, run the command from the directory `udagram-api/`:
-    ```bash
-    npm install .
-    ```
-* To run the application locally, run:
-    ```bash
-    npm run dev
-    ```
-* You can visit `http://localhost:8080/api/v0/feed` in your web browser to verify that the application is running. You should see a JSON payload. Feel free to play around with Postman to test the API's.
+For Kubernetes:
+Install Kubernetes using the Kubeone instructions given here: https://github.com/kubermatic/kubeone/blob/master/docs/quickstart-aws.md
+Follow the tutorial videos closely, and export the KubeConfig.
+Check for the proper setup by using 'kubectl get pods' cmd.
+Set up the secret keys and configmaps for the project. There are the .yaml files in the k8s folder.
+Run the config.sh command (run chmod a+x.. first)
+Bascially the script will run the following command:
+ kubectl apply -f [file-name] on the secret key, config map files.
+ kubectl apply -f [file-name]' again for the remaining .yaml files. 
 
-### Frontend App
-* To download all the package dependencies, run the command from the directory `udagram-frontend/`:
-    ```bash
-    npm install .
-    ```
-* Install Ionic Framework's Command Line tools for us to build and run the application:
-    ```bash
-    npm install -g ionic
-    ```
-* Prepare your application by compiling them into static files.
-    ```bash
-    ionic build
-    ```
-* Run the application locally using files created from the `ionic build` command.
-    ```bash
-    ionic serve
+If all is set up correctly, you will see all pods running. Test using kubectl get rs, kubectl get deployment, and kubectl get pods`.
+Forward the deployment port to localhost:8100 and localhost:8080 using (if not load balance type in yaml file)
+kubectl port-forward [name]/reverseproxy-[id] 8080:8080.
+kubectl port-forward [name]/frontend-[id] 8100:80
+Go to Localhost:8100 to test
+Kubernetes deployment completed.
+
+
+
     ```
 * You can visit `http://localhost:8100` in your web browser to verify that the application is running. You should see a web interface.
 
