@@ -1,15 +1,18 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    service: backend-user
+    app: backend-user
   name: backend-user
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: backend-user
   template:
     metadata:
       labels:
-        service: backend-user
+        app: backend-user
     spec:
       containers:
         - image: game123/udagram-user
@@ -23,16 +26,6 @@ spec:
               memory: "1024Mi"
               cpu: "500m"
           env:
-            - name: POSTGRESS_PASSWORD
-              valueFrom:
-                configMapKeyRef:
-                  name: env-config
-                  key: POSTGRESS_PASSWORD
-            - name: POSTGRESS_USERNAME
-              valueFrom:
-                configMapKeyRef:
-                  name: env-config
-                  key: POSTGRESS_USERNAME
             - name: URL
               valueFrom:
                 configMapKeyRef:
@@ -53,4 +46,14 @@ spec:
                 configMapKeyRef:
                   name: env-config
                   key: POSTGRESS_HOST
+            - name: POSTGRESS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: env-secret
+                  key: POSTGRESS_PASSWORD
+            - name: POSTGRESS_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: env-secret
+                  key: POSTGRESS_USERNAME
       restartPolicy: Always
