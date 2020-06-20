@@ -1,8 +1,8 @@
 # echo -n $POSTGRESS_USERNAME | base64
 # echo -n $POSTGRESS_PASSWORD | base64
 # base64 .aws/credentials
-# Many Thanks to Juan Delgado
-# the secret key part is not even mentioned in tutorial
+# Many Thanks to Juan and Wallace
+# for providing methods to inject env variable to k8s
 kubectl apply -f aws-secret.yaml
 kubectl apply -f env-secret.yaml
 kubectl apply -f env-configmap.yaml
