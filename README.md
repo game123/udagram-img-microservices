@@ -26,14 +26,14 @@ The project is split into four parts:
 ### Prerequisite
 
 Create account and login to Docker Hub and create the following repositories:
-udagram-feed
-udagram-user
-udagram-frontend
-reverseproxy
+1. udagram-feed
+2. udagram-user
+3. udagram-frontend
+4. reverseproxy
 
 Afterwards, we can prevent the file from being included in your solution by adding the file to our `.gitignore` file.
 
-For Docker:
+### For Docker:
 First, install Docker in your system.
 Create the docker images for the frontend, udagram-feed, and udagram-user folders.
 E.g. the command is docker build -t [name]/udagram-frontend .
@@ -43,7 +43,7 @@ Once all images are pushed, you can build using sudo -E docker-compose up whilst
 Go to Localhost:8080 to test.
 Docker deployment complete.
 
-For Kubernetes:
+### For Kubernetes:
 Install Kubernetes using the Kubeone instructions given here: https://github.com/kubermatic/kubeone/blob/master/docs/quickstart-aws.md
 Follow the tutorial videos closely, and export the KubeConfig.
 Check for the proper setup by using 'kubectl get pods' cmd.
@@ -60,14 +60,14 @@ kubectl port-forward [name]/frontend-[id] 8100:80
 Go to Localhost:8100 to test
 Kubernetes deployment completed.
 
-For Travis:
+### For Travis:
 Ensure your Github account is linked to Travis. This is done via signing up for a Travis account, then from within linking the two together.
 Push your folders to Github repository.
 Ensure the .travis.yml file is in the root folder of the Github repo.
 Go to Travis, then search for the repository, and then set up new build.
 Travis deployment completed.
 
-Screenshots
+### Screenshots
 screenshots folder
 
 Docker images in repository in DockerHub
